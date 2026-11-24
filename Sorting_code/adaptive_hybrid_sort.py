@@ -1,11 +1,3 @@
-"""AHS-inspired controller integrated with the user's sorting modules.
-
-This is an educational reimplementation based on the paper description,
-not the author's original source code. It deliberately uses only the
-provided Insertion Sort, Counting Sort, and Radix Sort modules; Quick Sort
-is not imported or used.
-"""
-
 from collections import Counter
 from dataclasses import dataclass
 from enum import Enum, auto
