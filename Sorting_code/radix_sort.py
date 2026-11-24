@@ -1,45 +1,62 @@
-def _counting_sort_by_digit(arr, exp):
+def counting_sort(arr, exp1):
+
     n = len(arr)
-    output = [0] * n
-    count = [0] * 10
 
-    for x in arr:
-        count[(x // exp) % 10] += 1
+    # The output array elements that will have sorted arr
+    output = [0] * (n)
 
+    # initialize count array as 0
+    count = [0] * (10)
+
+    # Store count of occurrences in count[]
+    for i in range(0, n):
+        index = arr[i] // exp1
+        count[index % 10] += 1
+
+    # Change count[i] so that count[i] now contains actual
+    # position of this digit in output array
     for i in range(1, 10):
         count[i] += count[i - 1]
 
-    for x in reversed(arr):
-        digit = (x // exp) % 10
-        count[digit] -= 1
-        output[count[digit]] = x
+    # Build the output array
+    i = n - 1
+    while i >= 0:
+        index = arr[i] // exp1
+        output[count[index % 10] - 1] = arr[i]
+        count[index % 10] -= 1
+        i -= 1
 
-    return output
+    # Copying the output array to arr[],
+    # so that arr now contains sorted numbers
+    i = 0
+    for i in range(0, len(arr)):
+        arr[i] = output[i]
 
-
-def _radix_sort_non_negative(arr):
-    if not arr:
-        return []
-
-    max_val = max(arr)
-    exp = 1
-
-    while max_val // exp > 0:
-        arr = _counting_sort_by_digit(arr, exp)
-        exp *= 10
-
-    return arr
+# Method to do Radix Sort
 
 
 def radix_sort(arr):
-    if len(arr) <= 1:
-        return list(arr)
 
-    negatives = [-x for x in arr if x < 0]
-    positives = [x for x in arr if x >= 0]
+    # Find the maximum number to know number of digits
+    max1 = max(arr)
 
-    sorted_neg = _radix_sort_non_negative(negatives)
-    sorted_pos = _radix_sort_non_negative(positives)
+    # Do counting sort for every digit. Note that instead
+    # of passing digit number, exp is passed. exp is 10^i
+    # where i is current digit number
+    exp = 1
+    while max1 / exp >= 1:
+        counting_sort(arr, exp)
+        exp *= 10
 
-    # Negatif: urutan menaik nilai mutlak -> dibalik & dikembalikan tanda minus
-    return [-x for x in reversed(sorted_neg)] + sorted_pos
+
+# Driver code
+arr = [170, 45, 75, 90, 802, 24, 2, 66]
+
+# Function Call
+radixSort(arr)
+
+for i in range(len(arr)):
+    print(arr[i], end=" ")
+
+# This code is contributed by Mohit Kumra
+# Edited by Patrick Gallagher
